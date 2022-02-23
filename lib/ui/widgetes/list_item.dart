@@ -21,6 +21,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -63,9 +64,14 @@ class ListItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: textstyle.bold.copyWith(fontSize: 18),
+                SizedBox(
+                  width: 240,
+                  child: Text(
+                    title,
+                    style: textstyle.bold.copyWith(fontSize: 18),
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(

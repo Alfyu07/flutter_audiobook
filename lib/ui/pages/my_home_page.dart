@@ -193,8 +193,58 @@ class _MyHomePageState extends State<MyHomePage>
                           ),
                         ),
                       ),
-                      Material(),
-                      Material(),
+                      ListView.builder(
+                        itemCount: books == null ? 0 : books!.length - 6,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DetailAudiopage(
+                                    books: books,
+                                    index: index,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ListItem(
+                              imgUrl: books![index]["img"],
+                              rate: books![index]["rating"],
+                              title: books![index]["title"],
+                              author: books![index]["text"],
+                              tag: "Love",
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListView.builder(
+                        itemCount: books == null ? 0 : books!.length - 6,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DetailAudiopage(
+                                    books: books,
+                                    index: index,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ListItem(
+                              imgUrl: books![index]["img"],
+                              rate: books![index]["rating"],
+                              title: books![index]["title"],
+                              author: books![index]["text"],
+                              tag: "Love",
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
