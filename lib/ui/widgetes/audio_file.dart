@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 class AudioFile extends StatefulWidget {
   final AudioPlayer advancedPlayer;
-  const AudioFile({Key? key, required this.advancedPlayer}) : super(key: key);
+  final String audioPath;
+  const AudioFile(
+      {Key? key, required this.advancedPlayer, required this.audioPath})
+      : super(key: key);
 
   @override
   _AudioFileState createState() => _AudioFileState();
@@ -13,8 +16,7 @@ class AudioFile extends StatefulWidget {
 class _AudioFileState extends State<AudioFile> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
-  String path = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-  // final String path =
+
   bool isPlaying = false;
   bool isPaused = false;
   bool isLoop = false;
@@ -27,6 +29,7 @@ class _AudioFileState extends State<AudioFile> {
   @override
   void initState() {
     super.initState();
+
     widget.advancedPlayer.onDurationChanged.listen((d) {
       setState(() {
         _duration = d;
@@ -39,11 +42,13 @@ class _AudioFileState extends State<AudioFile> {
       });
     });
 
+    widget.advancedPlayer.setUrl(widget.audioPath);
+
     widget.advancedPlayer.onPlayerCompletion.listen((p) {
       setState(() {
         _position = const Duration(seconds: 0);
         if (isLoop) {
-          widget.advancedPlayer.play(path);
+          widget.advancedPlayer.play(widget.audioPath);
           setState(() {
             isPlaying = true;
           });
@@ -53,8 +58,6 @@ class _AudioFileState extends State<AudioFile> {
         isPlaying = false;
       });
     });
-
-    widget.advancedPlayer.setUrl(path);
   }
 
   Widget btnLoop() => IconButton(
@@ -88,6 +91,7 @@ class _AudioFileState extends State<AudioFile> {
   Widget btnStart() => Padding(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: IconButton(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
           icon: Icon(
             isPlaying ? _icons[1] : _icons[0],
             size: 50,
@@ -95,7 +99,7 @@ class _AudioFileState extends State<AudioFile> {
           ),
           onPressed: () {
             if (!isPlaying) {
-              widget.advancedPlayer.play(path);
+              widget.advancedPlayer.play(widget.audioPath);
               setState(() {
                 isPlaying = true;
               });

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ebooks_app/ui/pages/detail_audio_page.dart';
 import 'package:ebooks_app/ui/widgetes/app_tabs.dart';
 import 'package:ebooks_app/ui/widgetes/list_item.dart';
 import 'package:flutter/material.dart';
@@ -171,12 +172,24 @@ class _MyHomePageState extends State<MyHomePage>
                         itemBuilder: (context, index) => Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
-                          child: ListItem(
-                            imgUrl: books![index]["img"],
-                            rate: books![index]["rating"],
-                            title: books![index]["title"],
-                            author: books![index]["text"],
-                            tag: "Love",
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DetailAudiopage(
+                                    books: books,
+                                    index: index,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ListItem(
+                              imgUrl: books![index]["img"],
+                              rate: books![index]["rating"],
+                              title: books![index]["title"],
+                              author: books![index]["text"],
+                              tag: "Love",
+                            ),
                           ),
                         ),
                       ),
