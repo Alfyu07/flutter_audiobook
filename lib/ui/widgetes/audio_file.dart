@@ -11,8 +11,8 @@ class AudioFile extends StatefulWidget {
 }
 
 class _AudioFileState extends State<AudioFile> {
-  Duration _duration = Duration();
-  Duration _position = Duration();
+  Duration _duration = const Duration();
+  Duration _position = const Duration();
   String path = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
   // final String path =
   bool isPlaying = false;
@@ -41,8 +41,16 @@ class _AudioFileState extends State<AudioFile> {
 
     widget.advancedPlayer.onPlayerCompletion.listen((p) {
       setState(() {
-        isPlaying = false;
         _position = const Duration(seconds: 0);
+        if (isLoop) {
+          widget.advancedPlayer.play(path);
+          setState(() {
+            isPlaying = true;
+          });
+          return;
+        }
+
+        isPlaying = false;
       });
     });
 
@@ -57,16 +65,16 @@ class _AudioFileState extends State<AudioFile> {
         ),
         onPressed: () {
           if (isLoop) {
-            widget.advancedPlayer.setReleaseMode(ReleaseMode.LOOP);
+            widget.advancedPlayer.setReleaseMode(ReleaseMode.RELEASE);
             setState(() {
               isLoop = false;
             });
-          } else {
-            widget.advancedPlayer.setReleaseMode(ReleaseMode.RELEASE);
-            setState(() {
-              isLoop = true;
-            });
+            return;
           }
+          widget.advancedPlayer.setReleaseMode(ReleaseMode.LOOP);
+          setState(() {
+            isLoop = true;
+          });
         },
       );
   Widget btnShuffle() => IconButton(
@@ -92,12 +100,11 @@ class _AudioFileState extends State<AudioFile> {
                 isPlaying = true;
               });
               return;
-            } else {
-              widget.advancedPlayer.pause();
-              setState(() {
-                isPlaying = false;
-              });
             }
+            widget.advancedPlayer.pause();
+            setState(() {
+              isPlaying = false;
+            });
           },
         ),
       );
@@ -118,11 +125,13 @@ class _AudioFileState extends State<AudioFile> {
           size: 15,
         ),
       );
-
   Widget btnFwd10() => IconButton(
       onPressed: () {
         const add10s = Duration(seconds: 10);
         final tmpPosition = _position + add10s;
+        if (tmpPosition > _duration) {
+          return;
+        }
         setState(() {
           changeToSecond(tmpPosition.inSeconds.toInt());
         });
@@ -136,6 +145,12 @@ class _AudioFileState extends State<AudioFile> {
       onPressed: () {
         const min10s = Duration(seconds: 10);
         final tmpPosition = _position - min10s;
+        if (tmpPosition < const Duration(seconds: 0)) {
+          setState(() {
+            changeToSecond(0);
+          });
+          return;
+        }
         setState(() {
           changeToSecond(tmpPosition.inSeconds.toInt());
         });
